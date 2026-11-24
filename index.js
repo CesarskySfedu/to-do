@@ -43,4 +43,14 @@ items.forEach(function (item) {
 	listElement.append(newItem);
 });
 
+formElement.addEventListener("submit", function (event) {
+	event.preventDefault();
+
+	const item = inputElement.value;
+	const newItem = createItem(item);
+
+	listElement.prepend(newItem);
+
+	inputElement.value = "";
+});
 
