@@ -31,6 +31,8 @@ function createItem(item) {
 	const editButton = clone.querySelector(".to-do__item-button_type_edit");
 
 	textElement.textContent = item;
+	// Переменная для хранения предыдущего текста задачи, чтобы можно было восстановить его при отмене редактирования
+	let previousText = item;
 
 	// Обработчик кнопки удаления
 	deleteButton.addEventListener("click", function () {
@@ -51,16 +53,27 @@ function createItem(item) {
 
 	// Обработчики кнопки редактирования
 	editButton.addEventListener("click", function () {
+		previousText = textElement.textContent;
+
 		textElement.setAttribute("contenteditable", "true");
 		textElement.focus();
 	});
 
 	textElement.addEventListener("blur", function () {
+		const editedText = textElement.textContent.trim();
+
+		if (!editedText) {
+			textElement.textContent = previousText;
+		} else {
+			textElement.textContent = editedText;
+		}
+
 		textElement.setAttribute("contenteditable", "false");
 
 		items = getTasksFromDOM();
 		saveTasks(items);
 	});
+
 
 
 	return clone;
@@ -95,7 +108,12 @@ items.forEach(function (item) {
 formElement.addEventListener("submit", function (event) {
 	event.preventDefault();
 
-	const item = inputElement.value;
+	const item = inputElement.value.trim();
+
+	if (!item) {
+		return;
+	}
+
 	const newItem = createItem(item);
 
 	listElement.prepend(newItem);
