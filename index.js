@@ -38,7 +38,23 @@ function createItem(item) {
 		const items = getTasksFromDOM();
 		saveTasks(items);
 	});
+	// Обработчик кнопки дублирования
+	duplicateButton.addEventListener("click", function () {
+		const newItem = createItem(textElement.textContent);
+		listElement.prepend(newItem);
 
+		items = getTasksFromDOM();
+		saveTasks(items);
+	});
+	// Обработчик кнопки редактирования
+	editButton.addEventListener("click", function () {
+		const newText = prompt("Введите новый текст задачи:", textElement.textContent);
+		if (newText !== null) {
+			textElement.textContent = newText;
+			const items = getTasksFromDOM();
+			saveTasks(items);
+		}
+	});
 
 	return clone;
 }
