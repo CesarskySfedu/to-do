@@ -31,6 +31,7 @@ function createItem(item) {
 	const editButton = clone.querySelector(".to-do__item-button_type_edit");
 
 	textElement.textContent = item;
+
 	// Обработчик кнопки удаления
 	deleteButton.addEventListener("click", function () {
 		clone.remove();
@@ -38,6 +39,7 @@ function createItem(item) {
 		const items = getTasksFromDOM();
 		saveTasks(items);
 	});
+
 	// Обработчик кнопки дублирования
 	duplicateButton.addEventListener("click", function () {
 		const newItem = createItem(textElement.textContent);
@@ -46,15 +48,20 @@ function createItem(item) {
 		items = getTasksFromDOM();
 		saveTasks(items);
 	});
-	// Обработчик кнопки редактирования
+
+	// Обработчики кнопки редактирования
 	editButton.addEventListener("click", function () {
-		const newText = prompt("Введите новый текст задачи:", textElement.textContent);
-		if (newText !== null) {
-			textElement.textContent = newText;
-			const items = getTasksFromDOM();
-			saveTasks(items);
-		}
+		textElement.setAttribute("contenteditable", "true");
+		textElement.focus();
 	});
+
+	textElement.addEventListener("blur", function () {
+		textElement.setAttribute("contenteditable", "false");
+
+		items = getTasksFromDOM();
+		saveTasks(items);
+	});
+
 
 	return clone;
 }
